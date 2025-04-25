@@ -7,9 +7,7 @@ function generateRandomString(length = 8) {
 }
 
 const email = `${generateRandomString(6)}@mail.com`;
-
 const phone = `+7${Math.floor(9000000000 + Math.random() * 1000000000)}`;
-
 const password = generateRandomString(8);
 
 test.describe("[UI] Register", () => {
