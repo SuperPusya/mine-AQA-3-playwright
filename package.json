@@ -1,0 +1,22 @@
+{
+  "name": "mine-aqa-3-playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperPusya/mine-AQA-3-playwright.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SuperPusya/mine-AQA-3-playwright/issues"
+  },
+  "homepage": "https://github.com/SuperPusya/mine-AQA-3-playwright#readme",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.14.1"
+  }
+}
