@@ -1,0 +1,30 @@
+- img
+- text: Sales Portal
+- separator
+- list:
+  - listitem:
+    - link "Home":
+      - /url: "#"
+      - img
+  - listitem:
+    - link "Orders":
+      - /url: "#"
+      - img
+  - listitem:
+    - link "Products":
+      - /url: "#"
+      - img
+  - listitem:
+    - link "Customers":
+      - /url: "#"
+      - img
+  - listitem:
+    - link "Managers":
+      - /url: "#"
+      - img
+- switch "Dark mode"
+- text: Dark mode
+- separator
+- link "Anatoly":
+  - /url: "#"
+  - strong: Anatoly
