@@ -17,3 +17,4 @@ export function generateCustomerData(params?: Partial<ICustomer>): ICustomer {
     ...params,
   };
 }
+
