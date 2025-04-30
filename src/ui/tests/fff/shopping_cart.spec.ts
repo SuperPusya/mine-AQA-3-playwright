@@ -22,22 +22,43 @@ test.describe("[UI] [Demo Shopping Cart] [E2E]", () => {
   test("Successfull checkout with 5 products and all promocodes", async ({ page }) => {
     await page.goto("https://anatoly-karpovich.github.io/demo-shopping-cart/");
 
+    // 1. Добавить продукты
     await addProductsToCart(products, page);
+
+    // 2. Получить цены и сумму
     const prices = await getProductsPrices(products, page);
     const total = sumPrices(prices);
+
+    // 3. Валидировать бейдж
     await expect(page.locator("#badge-number")).toHaveText(String(products.length));
+
+    // 4. Открыть чекаут
     await page.getByRole("button", { name: "Shopping Cart" }).click();
+
+    // 5. Валидировать продукты в корзине
     await expectProductsInCart(products, page);
+
+    // 6. Валидировать сумму
     await expect(page.locator("#total-price")).toHaveText(formatTotal(total));
+
+    // 7. Ввести все промокоды
     await applyAllPromocodes(promocodes, page);
+
+    // 8. Валидировать конечную сумму
     const displayedTotal = await getDisplayedTotal(page);
     const discountedTotal = calcDiscountedTotal(total, promocodes);
     expect(displayedTotal).toBeCloseTo(discountedTotal, 2);
+
+    // 9. Зачекаутиться
     await page.locator("#continue-to-checkout-button").click();
+
+    // 10. Валидировать сумму заказа
     const orderTotal = await getOrderTotal(page);
     expect(orderTotal).toBe(displayedTotal);
   });
 });
+
+// --- Вспомогательные функции ---
 
 async function addProductsToCart(productNames: string[], page: Page) {
   for (const name of productNames) {
@@ -54,6 +75,7 @@ function sumPrices(prices: number[]): number {
 }
 
 function formatTotal(total: number): string {
+  // Если целое - без дробной части, если дробное - два знака после запятой
   return Number.isInteger(total) ? `$${total}.00` : `$${total.toFixed(2)}`;
 }
 
@@ -76,7 +98,7 @@ async function applyAllPromocodes(promocodes: Record<string, number>, page: Page
 
 async function getDisplayedTotal(page: Page): Promise<number> {
   const totalText = await page.locator("#total-price").innerText();
-  const totalAmountText = totalText.split(" ")[0];
+  const totalAmountText = totalText.split(" ")[0]; // "$1412.50"
   return parseFloat(totalAmountText.replace("$", ""));
 }
 
@@ -89,6 +111,8 @@ async function getOrderTotal(page: Page): Promise<number> {
   const totalOrder = await page.locator(".text-muted").last().innerText();
   return parseFloat(totalOrder.replace("$", ""));
 }
+
+// --- Элементы страницы ---
 
 function getAddToCartButton(productName: string, page: Page) {
   return page
