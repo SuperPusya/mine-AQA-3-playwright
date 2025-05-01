@@ -23,4 +23,8 @@ export abstract class SalesPortalPage {
   async waitForNotification(text: string) {
     await expect(this.notification.last()).toHaveText(text);
   }
+
+  async waitForNotificationClose(text: string) {
+    await expect(this.notification.last()).not.toBeVisible;
+  }
 }

@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { ModuleName } from "types/home.types";
-import { SalesPortalPage } from "./salesPortal.page";
+import { SalesPortalPage } from "../salesPortal.page";
 import { ILogin } from "types/sign-in.types";
 
 export class SignIn extends SalesPortalPage {
