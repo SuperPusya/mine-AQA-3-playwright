@@ -30,7 +30,7 @@ test.describe("[API] [Auth] [ValidateData]", () => {
     expect.soft(loginResponse.status()).toBe(STATUS_CODES.OK);
 
     const headers = loginResponse.headers();
-    const authHeader = headers["authorization"] || headers["Authorization"];
+    const authHeader = headers["authorization"];
 
     expect.soft(authHeader).toBeTruthy();
   });

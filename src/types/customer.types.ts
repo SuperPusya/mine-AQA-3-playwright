@@ -1,6 +1,7 @@
 import { COUNTRIES } from "data/customers/countries.data";
 
 export interface ICustomer {
+  _id: any;
   email: string;
   name: string;
   country: COUNTRIES;
