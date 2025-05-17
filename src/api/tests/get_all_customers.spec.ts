@@ -1,45 +1,36 @@
-// Написать смоук API тест на получение всех кастомеров (без фильтрационных параметров) со следующими шагами:
-//   - Залогиниться
-//   - Создать кастомера и проверить 200й статус
-//   - Получить всех кастомеров
-//   - создать и проверить схему
-//   - проверить статус
-//   - проверить, что в массиве тела респонса есть созданный кастомер
-//   - Проверить поля IsSuccess и ErrorMessage
-
-import test, { expect } from "@playwright/test";
+import { test, expect } from "fixtures/controllers.fixture";
 import { apiConfig } from "config/api-config";
 import { MY_USER } from "config/envirement";
 import { generateCustomerData } from "data/customers/generateCustomer.data";
 import { customersListSchema } from "data/schemas/customers/customersList.schema";
 import { STATUS_CODES } from "data/statusCodes";
 import _ from "lodash";
-import { ICustomer } from "types/customer.types";
+import { ICustomerFromResponse } from "types/customer.types";
 import { validateSchema } from "utils/validations/schemaValidation";
 
 test.describe("[API] [Customers] [GetAll]", () => {
-  let id = "";
   let token = "";
 
-  test("Create customer with smoke data", async ({ request }) => {
-    const loginResponse = await request.post(
-      apiConfig.BASE_URL + apiConfig.ENDPOINTS.LOGIN,
-      {
-        data: { username: MY_USER.email, password: MY_USER.password },
-        headers: {
-          "content-type": "application/json",
-        },
-      }
-    );
+  test("Create customer with smoke data", async ({
+    request,
+    signInController,
+  }) => {
+    const loginData = {
+      username: MY_USER.email,
+      password: MY_USER.password,
+    };
 
-    const headers = loginResponse.headers();
-    token = headers["authorization"];
-    const body = await loginResponse.json();
+    const loginResponse = await signInController.signIn(loginData);
 
-    expect.soft(loginResponse.status()).toBe(STATUS_CODES.OK);
+    expect.soft(loginResponse.status).toBe(STATUS_CODES.OK);
+
+    const headers = loginResponse.headers as Record<string, string>;
+    const token = headers["authorization"];
+
     expect.soft(token).toBeTruthy();
 
     const customerData = generateCustomerData();
+
     const customerResponse = await request.post(
       apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS,
       {
@@ -52,10 +43,6 @@ test.describe("[API] [Customers] [GetAll]", () => {
     );
 
     const customerBody = await customerResponse.json();
-    console.log(
-      "Ответ создания кастомера:",
-      JSON.stringify(customerBody, null, 2)
-    );
 
     expect.soft(customerResponse.status()).toBe(STATUS_CODES.CREATED);
 
@@ -75,17 +62,20 @@ test.describe("[API] [Customers] [GetAll]", () => {
     validateSchema(customersListSchema, getAllBody);
 
     const createdCustomerId = customerBody.Customer._id;
-    console.log("createdCustomerId:", createdCustomerId);
 
-    const customersArray = getAllBody.Customers || [];
+    const customersArray: ICustomerFromResponse[] = getAllBody.Customers || [];
 
     const foundCustomer = customersArray.find(
-      (c: ICustomer) => c._id === createdCustomerId
+      (c) => c._id === createdCustomerId
     );
 
-    console.log("foundCustomer:", foundCustomer);
-
     expect.soft(foundCustomer).toBeDefined();
+
+    if (foundCustomer) {
+      expect(
+        _.isEqual(_.omit(foundCustomer, ["_id", "createdOn"]), customerData)
+      ).toBe(true);
+    }
 
     expect.soft(getAllBody.IsSuccess).toBe(true);
     expect.soft(getAllBody.ErrorMessage).toBeNull();
