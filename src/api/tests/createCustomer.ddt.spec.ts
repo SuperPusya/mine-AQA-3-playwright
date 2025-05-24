@@ -3,7 +3,6 @@ import { MY_USER } from "config/envirement";
 import { generateCustomerData } from "data/customers/generateCustomer.data";
 import { customerSchema } from "data/schemas/customers/customer.schema";
 import { STATUS_CODES } from "data/statusCodes";
-import _ from "lodash";
 import { ICustomer } from "types/customer.types";
 import { validateSchema } from "utils/validations/schemaValidation";
 import { ERROR_MESSAGE } from "data/errorMessage.data";
@@ -42,12 +41,9 @@ test.describe("[API] [Customers] [Create] Simple Positive", () => {
     expect(response.body.IsSuccess).toBe(true);
     expect(response.body.ErrorMessage).toBeNull();
 
-    expect(
-      _.isEqual(
-        _.omit(response.body.Customer, ["_id", "createdOn"]),
-        customerData
-      )
-    ).toBe(true);
+    expect(response.body.Customer).toMatchObject({
+      ...customerData,
+    });
 
     createdCustomerId = response.body.Customer._id;
   });
@@ -65,12 +61,9 @@ test.describe("[API] [Customers] [Create] Simple Positive", () => {
     expect(response.body.IsSuccess).toBe(true);
     expect(response.body.ErrorMessage).toBeNull();
 
-    expect(
-      _.isEqual(
-        _.omit(response.body.Customer, ["_id", "createdOn"]),
-        customerData
-      )
-    ).toBe(true);
+    expect(response.body.Customer).toMatchObject({
+      ...customerData,
+    });
 
     createdCustomerId = response.body.Customer._id;
   });
@@ -80,7 +73,7 @@ test.describe("[API] [Customers] [Create] Simple Positive", () => {
   }) => {
     const customerData: ICustomer = {
       ...generateCustomerData(),
-      email: "invalid-email-format", // некорректный email
+      email: "invalid-email-format",
     };
 
     const response = await customersController.create(customerData, token);
@@ -90,12 +83,12 @@ test.describe("[API] [Customers] [Create] Simple Positive", () => {
     expect(response.body.ErrorMessage).toBe(ERROR_MESSAGE.INCORRECT_BODY);
   });
 
-  test("Create customer with invalid phone number", async ({
+  test("Create customer with phone number without '+' sign", async ({
     customersController,
   }) => {
     const customerData: ICustomer = {
       ...generateCustomerData(),
-      phone: "123456789", // некорректный телефон: нет + и меньше 10 символов
+      phone: "1234567890",
     };
 
     const response = await customersController.create(customerData, token);

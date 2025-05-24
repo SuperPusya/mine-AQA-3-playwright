@@ -1,4 +1,4 @@
-import { SALES_PORTAL_URL, USER_LOGIN, USER_PASSWORD } from "config/evnironment";
+import { SALES_PORTAL_URL, MY_USER } from "config/envirement";
 import { test as base } from "./pages.fixture";
 
 interface IBusinessSteps {
@@ -9,8 +9,8 @@ export const test = base.extend<IBusinessSteps>({
   loginAsLocalUser: async ({ page, homePage }, use) => {
     await use(async () => {
       await page.goto(SALES_PORTAL_URL);
-      await page.locator("#emailinput").fill(USER_LOGIN);
-      await page.locator("#passwordinput").fill(USER_PASSWORD);
+      await page.locator("#emailinput").fill(MY_USER.email);
+      await page.locator("#passwordinput").fill(MY_USER.password);
       await page.getByRole("button", { name: "Login" }).click();
       await homePage.waitForOpened();
     });
