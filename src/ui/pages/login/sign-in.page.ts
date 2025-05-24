@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { ModuleName } from "types/home.types";
 import { SalesPortalPage } from "../salesPortal.page";
-import { ILogin } from "types/sign-in.types";
+import { ILoginRequest } from "types/signIn.type";
 
 export class SignIn extends SalesPortalPage {
   emailInput = this.page.locator("#emailinput");
@@ -10,8 +10,8 @@ export class SignIn extends SalesPortalPage {
 
   uniqueElement = this.loginButton;
 
-  async fillCredentials(user: Partial<ILogin>) {
-    user.email && (await this.emailInput.fill(user.email));
+  async fillCredentials(user: Partial<ILoginRequest>) {
+    user.username && (await this.emailInput.fill(user.username));
     user.password && (await this.passwordInput.fill(user.password));
   }
 
