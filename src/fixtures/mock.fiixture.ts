@@ -1,7 +1,8 @@
-import { Page, test as base } from "@playwright/test";
+import { test as base } from "fixtures/controllers.fixture";
 import { apiConfig } from "config/api-config";
 import { STATUS_CODES } from "data/statusCodes";
 import { IMetricsResponse } from "types/home.types";
+import { Page } from "@playwright/test";
 
 class Mock {
   constructor(private page: Page) {}
