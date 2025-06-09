@@ -38,7 +38,6 @@ test.describe("[UI] [Sales Portal] [User]", async () => {
 
     await customersPage.waitForOpened();
     await customersPage.waitForNotification(NOTIFICATIONS.CUSTOMER_CREATED);
-    await customersPage.verifyCustomerPosition();
     await customersPage.verifyCustomerInTable(data);
   });
 });

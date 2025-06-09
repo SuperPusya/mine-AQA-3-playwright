@@ -9,11 +9,12 @@ export class SignIn extends SalesPortalPage {
   loginButton = this.page.locator('button[type="submit"]');
 
   uniqueElement = this.loginButton;
-
+  
   async fillCredentials(user: Partial<ILoginRequest>) {
-    user.username && (await this.emailInput.fill(user.username));
+    user.email && (await this.emailInput.fill(user.email));
     user.password && (await this.passwordInput.fill(user.password));
   }
+  
 
   async clickLoginButton() {
     await this.loginButton.click();

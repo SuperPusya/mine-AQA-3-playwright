@@ -12,6 +12,7 @@ test.describe("[UI] [Sales Portal] [User]", () => {
     addNewCustomerPage,
     deleteCustomerModal,
   }) => {
+    console.log(MY_USER);
     await page.goto(SALES_PORTAL_URL);
     await signInPage.fillCredentials(MY_USER);
     await signInPage.clickLoginButton();

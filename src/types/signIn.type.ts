@@ -2,7 +2,7 @@ import { IResponseFields } from "./api.types";
 
 // Интерфейс для данных логина (запрос)
 export interface ILoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 

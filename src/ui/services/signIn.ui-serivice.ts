@@ -14,7 +14,7 @@ export class SignInUIService {
   async signInAsLocalUser() {
     await this.signInPage.openPortal();
     await this.signInPage.fillCredentials({
-      username: MY_USER.email,
+      email: MY_USER.email,
       password: MY_USER.password,
     });
     await this.signInPage.clickLoginButton();
